@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shotgun Cop Man Review | PixelPen</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            padding: 20px;
+        }
+        
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(0, 0, 0, 0.15),
+                    rgba(0, 0, 0, 0.15) 1px,
+                    transparent 1px,
+                    transparent 2px
+                );
+            pointer-events: none;
+            z-index: 100;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            border: 4px solid #ff00ff;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+        }
+        
+        .pixel-border {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            border: 4px solid #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                rgba(0, 0, 0, 0) 50%,
+                rgba(0, 0, 0, 0.2) 50%
+            );
+            background-size: 100% 4px;
+            z-index: 99;
+            pointer-events: none;
+            animation: scanline 8s linear infinite;
+        }
+        
+        @keyframes scanline {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 0 100%;
+            }
+        }
+        
+        .crt-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 4px 100%;
+            pointer-events: none;
+            z-index: 999;
+        }
+        
+        .glow {
+            animation: glow 2s infinite alternate;
+        }
+        
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #e60073, 0 0 20px #e60073;
+            }
+            to {
+                text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6;
+            }
+        }
+        
+        .pixel-art {
+            image-rendering: pixelated;
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            border-bottom: 3px dotted #ff00ff;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            color: #00ffff;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 0 #ff00ff;
+            letter-spacing: 2px;
+        }
+        
+        .tagline {
+            color: #ffff00;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+        
+        .character {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            border: 3px solid #ffff00;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .character::before {
+            content: "SCM";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #000;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .nav-btn {
+            background: #000;
+            color: #ffff00;
+            border: 3px solid #00ffff;
+            padding: 12px 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+        }
+        
+        .nav-btn:hover {
+            background: #00ffff;
+            color: #000;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+            transform: translateY(-3px);
+        }
+        
+        .nav-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .article-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px dashed #ff00ff;
+        }
+        
+        .back-btn {
+            background: #000;
+            color: #ffff00;
+            border: 3px solid #00ffff;
+            padding: 10px 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: #00ffff;
+            color: #000;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
+        }
+        
+        .article-title {
+            color: #ffff00;
+            font-size: 2.2rem;
+            text-align: center;
+            flex-grow: 1;
+            text-shadow: 2px 2px 0 #ff00ff;
+        }
+        
+        .article-subtitle {
+            color: #00ffff;
+            font-size: 1.2rem;
+            text-align: center;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+        
+        .article-content {
+            font-size: 1rem;
+            line-height: 1.8;
+            padding: 25px;
+            background: rgba(0, 0, 30, 0.6);
+            border: 2px solid #00ff00;
+            margin-bottom: 30px;
+        }
+        
+        .article-content p {
+            margin-bottom: 25px;
+            text-align: justify;
+        }
+        
+        .article-rating {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+            padding: 15px;
+            background: rgba(0, 0, 40, 0.7);
+            border: 2px solid #ff00ff;
+        }
+        
+        .rating-label {
+            color: #00ffff;
+            margin-right: 20px;
+            font-size: 1.2rem;
+        }
+        
+        .rating-stars {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .star {
+            color: #ffff00;
+            font-size: 2rem;
+        }
+        
+        .article-highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .highlight-box {
+            background: rgba(0, 30, 60, 0.7);
+            border: 2px solid #00ffff;
+            padding: 20px;
+        }
+        
+        .highlight-title {
+            color: #ffff00;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            border-bottom: 1px dashed #ff00ff;
+            padding-bottom: 5px;
+        }
+        
+        .gameplay-section {
+            background: rgba(30, 0, 30, 0.6);
+            border: 2px dashed #ff00ff;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        
+        .section-title {
+            color: #00ff00;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .quote {
+            border-left: 4px solid #ffff00;
+            padding: 15px 20px;
+            margin: 20px 0;
+            background: rgba(0, 0, 0, 0.3);
+            font-style: italic;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 30px;
+            border-top: 3px dotted #ff00ff;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .social-icon {
+            width: 50px;
+            height: 50px;
+            background: #000;
+            border: 2px solid #00ffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffff00;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 1.2rem;
+        }
+        
+        .social-icon:hover {
+            background: #00ffff;
+            color: #000;
+            transform: rotate(5deg) scale(1.1);
+        }
+        
+        .flashing {
+            animation: flash 0.5s infinite alternate;
+        }
+        
+        @keyframes flash {
+            from { opacity: 1; }
+            to { opacity: 0.6; }
+        }
+        
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 1.8rem;
+            }
+            
+            .tagline {
+                font-size: 0.8rem;
+            }
+            
+            .article-title {
+                font-size: 1.5rem;
+            }
+            
+            .article-subtitle {
+                font-size: 1rem;
+            }
+            
+            .nav-btn {
+                padding: 8px 12px;
+                font-size: 0.7rem;
+            }
+            
+            .article-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="scanline"></div>
+    <div class="crt-overlay"></div>
+    
+    <div class="container">
+        <div class="pixel-border"></div>
+        
+        <header>
+            <div class="character"></div>
+            <h1 class="logo glow">PIXEL<span style="color:#ff00ff;">PEN</span></h1>
+            <p class="tagline">WHERE WORDS MEET 8-BIT WONDER</p>
+        </header>
+        
+        <nav>
+            <a href="index.html" class="nav-btn flashing">HOME</a>
+            <a href="index.html#portfolio" class="nav-btn">GAME REVIEWS</a>
+            <a href="index.html#contact" class="nav-btn">CONTACT</a>
+        </nav>
+        
+        <div class="article-header">
+            <a href="index.html" class="back-btn">← BACK TO PORTFOLIO</a>
+            <h2 class="article-title">ARRESTING WITH STYLE</h2>
+        </div>
+        
+        <p class="article-subtitle">Shotgun Cop Man's Absurdist Take on Law Enforcement and Satire</p>
+        
+        <div class="article-content">
+            <p>SHOTGUN COP MAN IS A DELIRIOUSLY OVER-THE-TOP ACTION SPECTACLE THAT TAKES THE CONCEPT OF LAW ENFORCEMENT TO LUDICROUS EXTREMES. FROM THE CREATOR OF MY FRIEND PEDRO, THIS GAME DELIVERS A SATIRICAL PUNCH WITH EVERY SHOTGUN BLAST, MERGING DARK HUMOR WITH EXHILARATING GAMEPLAY.</p>
+            
+            <div class="gameplay-section">
+                <h3 class="section-title">GAMEPLAY MECHANICS</h3>
+                <p>THE CORE MECHANIC IS SIMPLE BUT SATISFYING: YOU PLAY AS A COP WHOSE SOLE METHOD OF ARRESTING CRIMINALS IS LITERALLY ARRESTING THEM—WITH A GIANT ARREST BUTTON THAT SLAMS PERPS INTO THE GROUND. THE SATISFACTION COMES FROM THE PHYSICS-BASED CHAOS THAT ENSUES AS YOU COMBO ARRESTS, BOUNCE OFF WALLS, AND CHAIN MOVES TOGETHER.</p>
+                
+                <p>THE GAME'S MOVEMENT SYSTEM IS A HIGHLIGHT, BLENDING WALL-RUNNING, DIVE-KICKS, AND SLIDE-TACKLES INTO A SEAMLESS FLOW OF VIOLENT BALANCE. THE ABILITY TO "ARREST CANCEL" MOVES ALLOWS FOR CREATIVE COMBAT APPROACHES THAT REWARD SKILLFUL PLAY.</p>
+            </div>
+            
+            <p>WHAT SETS SHOTGUN COP MAN APART IS ITS TONE—A PERFECT BLEND OF SELF-AWARE ABSURDITY AND GENUINE COMMENTARY ON POLICE BRUTALITY. THE GAME NEVER SHIES AWAY FROM ITS PREMISE, LEANING FULLY INTO THE RIDICULOUSNESS OF A COP WHO SOLVES EVERY PROBLEM WITH EXTREME FORCE, WHILE SIMULTANEOUSLY WINKING AT THE PLAYER ABOUT THE REAL-WORLD IMPLICATIONS.</p>
+            
+            <div class="article-rating">
+                <span class="rating-label">FINAL RATING:</span>
+                <div class="rating-stars">
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                </div>
+            </div>
+            
+            <div class="quote">
+                "SHOTGUN COP MAN IS THE MOST SATISFYINGLY CATHARTIC SATIRE I'VE PLAYED SINCE POSTAL 2. IT MANAGES TO BE BOTH A CRITIQUE OF POLICE VIOLENCE AND A CELEBRATION OF VIDEO GAME EXCESS—SOMETHING ONLY POSSIBLE THROUGH ITS TONGUE-IN-CHEEK EXECUTION."
+            </div>
+            
+            <h3 style="color:#00ff00; margin: 25px 0 15px; border-bottom: 1px dashed #ff00ff; padding-bottom: 5px;">KEY FEATURES</h3>
+            
+            <div class="article-highlights">
+                <div class="highlight-box">
+                    <h4 class="highlight-title">COMBO SYSTEM</h4>
+                    <p>Chain arrests, kicks, and slides to build massive combos with style multipliers. The more creative your violence, the higher your score.</p>
+                </div>
+                
+                <div class="highlight-box">
+                    <h4 class="highlight-title">WEAPONIZED HUMOR</h4>
+                    <p>Satirical take on police procedurals with absurd scenarios—busting a drug ring at a kindergarten bake sale has never been this darkly funny.</p>
+                </div>
+                
+                <div class="highlight-box">
+                    <h4 class="highlight-title">BOSS BATTLES</h4>
+                    <p>Epic confrontations with Satan and his demonic lawyers who argue against your unconstitutional arrest methods in court-room showdowns.</p>
+                </div>
+            </div>
+            
+            <p>THE LEVEL DESIGN IS A MASTERCLASS IN GUIDED CHAOS. EACH STAGE PRESENTS MULTIPLE APPROACH PATHS THAT ENCOURAGE EXPERIMENTATION. WILL YOU GO IN GUNS BLAZING, ARRESTING EVERYTHING THAT MOVES? OR WILL YOU TAKE A STEALTHIER APPROACH, USING THE ENVIRONMENT TO CREATE ACCIDENTAL ARRESTS? THE CHOICE IS YOURS, AND THE GAME REWARDS BOTH STYLES WITH EQUAL ENTHUSIASM.</p>
+            
+            <div class="gameplay-section">
+                <h3 class="section-title">NARRATIVE DEPTH</h3>
+                <p>BENEATH THE BLOOD-SPLATTERED SURFACE LIES A SURPRISINGLY NUANCED STORY ABOUT THE CORRUPTING NATURE OF POWER. AS YOU PROGRESS, YOUR CHARACTER BECOMES INCREASINGLY UNHINGED, QUESTIONING WHETHER YOU'RE STILL FIGHTING FOR JUSTICE OR SIMPLY ADDICTED TO THE THRILL OF ARRESTING. THE FINAL CONFRONTATION WITH SATAN SERVES AS A MIRROR TO YOUR OWN DESCENT INTO VIOLENT EXCESS.</p>
+            </div>
+            
+            <p>THE SOUND DESIGN DESERVES SPECIAL MENTION—EVERY ARREST IS ACCOMPANIED BY A SATISFYING CRUNCH AND THE SHRIEK OF POLICE SIRENS. THE VOICE ACTING, ESPECIALLY FOR THE DEMON LAWYERS, IS HILARIOUSLY OVER-THE-TOP, PERFECTLY MATCHING THE GAME'S TONE.</p>
+            
+            <p>WHILE THE GAME'S CONTENT WILL UNDOUBTEDLY BE DIVISIVE (ITS PORTRAYAL OF POLICE VIOLENCE STRIKES CLOSE TO REAL-WORLD ISSUES), IT HANDLES ITS THEMES WITH ENOUGH IRONY AND STYLISH EXECUTION TO AVOID FEELING EXPLOITATIVE. SHOTGUN COP MAN STANDS AS A BOLD STATEMENT IN INDIE GAMING—PROVING THAT VIDEO GAMES CAN TACKLE SENSITIVE TOPICS THROUGH SATIRE WITHOUT SACRIFICING FUN OR GAMEPLAY DEPTH.</p>
+        </div>
+        
+        
+        <footer>
+            <p>PIXELPEN PORTFOLIO SYSTEM - Nichole Higgins © 2025</p>
+            <p>INSERT COIN TO CONTINUE</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Initialize the page with some effects
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add scanline effect variation
+            setInterval(() => {
+                const scanline = document.querySelector('.scanline');
+                scanline.style.animationDuration = (Math.random() * 6 + 4) + 's';
+            }, 8000);
+            
+            // Add glow effect to stars
+            const stars = document.querySelectorAll('.star');
+            stars.forEach((star, index) => {
+                setTimeout(() => {
+                    star.classList.add('glow');
+                }, index * 300);
+            });
+            
+            // Add pulsing effect to character
+            const character = document.querySelector('.character');
+            setInterval(() => {
+                character.style.boxShadow = '0 0 15px #ff00ff';
+                setTimeout(() => {
+                    character.style.boxShadow = '0 0 5px #00ffff';
+                }, 500);
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PixelPen - 90s Arcade Writing Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="scanline"></div>
+    <div class="crt-overlay"></div>
+    
+    <div class="container">
+        <div class="pixel-border"></div>
+        
+        <header>
+            <div class="character"></div>
+            <h1 class="logo glow">PIXEL<span style="color:#ff00ff;">PEN</span></h1>
+            <p class="tagline">WHERE WORDS MEET 8-BIT WONDER</p>
+        </header>
+        
+        <nav>
+            <button class="nav-btn flashing" onclick="scrollToSection('about')">ABOUT ME</button>
+            <button class="nav-btn" onclick="scrollToSection('portfolio')">GAME REVIEWS</button>
+            <button class="nav-btn" onclick="scrollToSection('skills')">WRITING SKILLS</button>
+            <button class="nav-btn" onclick="scrollToSection('contact')">CONTACT</button>
+            <button class="nav-btn" onclick="startGame()">SECRET GAME</button>
+        </nav>
+        
+        <section id="about">
+            <h2 class="section-title">> ABOUT THE WRITER_</h2>
+            <div class="about-content">
+                <div class="pixel-avatar"></div>
+                <div class="about-text">
+                    <p>HELLO, PLAYER! I'M NICHOLE HIGGINS.</p>
+                    <br>
+                    <p>I'M A WRITER WITH A PASSION FOR STORYTELLING AND A LOVE FOR ALL THINGS RETRO. MY WORDS TRANSPORT READERS TO WORLDS BOTH FAMILIAR AND FANTASTICAL, MUCH LIKE THE CLASSIC GAMES THAT INSPIRED THIS PORTFOLIO.</p>
+                    <br>
+                    <p>WHEN I'M NOT CRAFTING NARRATIVES, YOU CAN FIND ME EXPLORING INDIE GAME DEVELOPMENTS, COLLECTING VINTAGE TECH, OR SAVORING A CUP OF COFFEE WHILE LISTENING TO CHIPTUNE MUSIC.</p>
+                    <br>
+                    <p>MY MISSION: TO CREATE IMMERSIVE EXPERIENCES THROUGH THE POWER OF WORDS, ONE PIXEL AT A TIME.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="portfolio">
+            <h2 class="section-title">> INDIE GAME REVIEWS_</h2>
+            <div class="portfolio-grid">
+                <!-- Despelote Review -->
+                <a href="despelote.html" class="portfolio-item">
+                    <h3 class="item-title">Kicking Dreams in Ecuador</h3>
+                    <p class="item-desc">Explores how Despelote captures the soul of childhood through young Julián's journey during Ecuador's historic 2001 World Cup qualification.</p>
+                </a>
+                
+                <!-- Look Outside Review -->
+                <a href="look-outside.html" class="portfolio-item">
+                    <h3 class="item-title">Stories Beyond the Window</h3>
+                    <p class="item-desc">Examines Look Outside's innovative use of environmental storytelling and atmospheric world-building.</p>
+                </a>
+                
+                <!-- Shotgun Cop Man Review -->
+                <a href="shotgun-cop-man.html" class="portfolio-item">
+                    <h3 class="item-title">Arresting with Style</h3>
+                    <p class="item-desc">Analyzes how Shotgun Cop Man's absurdist premise delivers over-the-top action with social commentary.</p>
+                </a>
+                
+                <!-- FREERIDE Review -->
+                <a href="freeride.html" class="portfolio-item">
+                    <h3 class="item-title">Freedom on Digital Rails</h3>
+                    <p class="item-desc">Explores how FREERIDE revolutionizes player agency through innovative personality-driven gameplay.</p>
+                </a>
+                
+                <!-- Expedition 33 Review -->
+                <a href="expedition-33.html" class="portfolio-item">
+                    <h3 class="item-title">Expedition into JRPG Excellence</h3>
+                    <p class="item-desc">Examines why Expedition 33 became 2025's highest-rated indie RPG.</p>
+                </a>
+                
+                <!-- Undertale Review -->
+                <a href="undertale.html" class="portfolio-item">
+                    <h3 class="item-title">Undertale's Timeless Underground Legacy</h3>
+                    <p class="item-desc">Analyzes how Undertale's themes continue to influence indie gaming culture.</p>
+                </a>
+            </div>
+        </section>
+        
+        <section id="skills">
+            <h2 class="section-title">> WRITING SKILLS_</h2>
+            <div class="skills-grid">
+                <div class="skills-item">
+                    <h3 class="item-title">GAME ANALYSIS</h3>
+                    <p class="item-desc">LEVEL: EXPERT</p>
+                    <div class="skill-bar">
+                        <div class="skill-level" style="width:95%; background:#ff00ff;"></div>
+                    </div>
+                </div>
+                <div class="skills-item">
+                    <h3 class="item-title">UX CRITIQUE</h3>
+                    <p class="item-desc">LEVEL: ADVANCED</p>
+                    <div class="skill-bar">
+                        <div class="skill-level" style="width:90%; background:#00ffff;"></div>
+                    </div>
+                </div>
+                <div class="skills-item">
+                    <h3 class="item-title">NARRATIVE EVALUATION</h3>
+                    <p class="item-desc">LEVEL: MASTER</p>
+                    <div class="skill-bar">
+                        <div class="skill-level" style="width:98%; background:#ffff00;"></div>
+                    </div>
+                </div>
+                <div class="skills-item">
+                    <h3 class="item-title">MECHANICS DESCRIPTION</h3>
+                    <p class="item-desc">LEVEL: EXPERT</p>
+                    <div class="skill-bar">
+                        <div class="skill-level" style="width:92%; background:#00ff00;"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="contact">
+            <h2 class="section-title">> CONTACT TERMINAL_</h2>
+            <div class="contact-form">
+                <input type="text" class="form-input" placeholder="YOUR NAME" id="name">
+                <input type="email" class="form-input" placeholder="EMAIL ADDRESS" id="email">
+                <textarea class="form-input" placeholder="MESSAGE" rows="4" id="message"></textarea>
+                <button class="submit-btn glow" onclick="sendMessage()">SEND MESSAGE</button>
+            </div>
+            
+        </section>
+        
+        <footer>
+            <p>PIXELPEN PORTFOLIO SYSTEM - Nichole Higgins © 2025</p>
+            <p>INSERT COIN TO CONTINUE</p>
+        </footer>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

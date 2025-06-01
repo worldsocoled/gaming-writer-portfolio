@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Undertale Retrospective | PixelPen</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            padding: 20px;
+        }
+        
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(0, 0, 0, 0.15),
+                    rgba(0, 0, 0, 0.15) 1px,
+                    transparent 1px,
+                    transparent 2px
+                );
+            pointer-events: none;
+            z-index: 100;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            border: 4px solid #ff00ff;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+        }
+        
+        .pixel-border {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            border: 4px solid #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                rgba(0, 0, 0, 0) 50%,
+                rgba(0, 0, 0, 0.2) 50%
+            );
+            background-size: 100% 4px;
+            z-index: 99;
+            pointer-events: none;
+            animation: scanline 8s linear infinite;
+        }
+        
+        @keyframes scanline {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 0 100%;
+            }
+        }
+        
+        .crt-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 4px 100%;
+            pointer-events: none;
+            z-index: 999;
+        }
+        
+        .glow {
+            animation: glow 2s infinite alternate;
+        }
+        
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #e60073, 0 0 20px #e60073;
+            }
+            to {
+                text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6;
+            }
+        }
+        
+        .pixel-art {
+            image-rendering: pixelated;
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            border-bottom: 3px dotted #ff00ff;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            color: #00ffff;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 0 #ff00ff;
+            letter-spacing: 2px;
+        }
+        
+        .tagline {
+            color: #ffff00;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+        
+        .character {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            background: linear-gradient(45deg, #ff5500, #ffff00);
+            border: 3px solid #ff00ff;
+            position: relative;
+            overflow: hidden;
+            border-radius: 50%;
+        }
+        
+        .character::before {
+            content: "UT";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #000;
+            font-weight: bold;
+            font-size: 1.8rem;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .nav-btn {
+            background: #000;
+            color: #ffff00;
+            border: 3px solid #00ffff;
+            padding: 12px 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+        }
+        
+        .nav-btn:hover {
+            background: #00ffff;
+            color: #000;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+            transform: translateY(-3px);
+        }
+        
+        .nav-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .article-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px dashed #ff00ff;
+        }
+        
+        .back-btn {
+            background: #000;
+            color: #ffff00;
+            border: 3px solid #00ffff;
+            padding: 10px 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: #00ffff;
+            color: #000;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
+        }
+        
+        .article-title {
+            color: #ffff00;
+            font-size: 2.2rem;
+            text-align: center;
+            flex-grow: 1;
+            text-shadow: 2px 2px 0 #ff00ff;
+        }
+        
+        .article-subtitle {
+            color: #00ffff;
+            font-size: 1.2rem;
+            text-align: center;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+        
+        .article-content {
+            font-size: 1rem;
+            line-height: 1.8;
+            padding: 25px;
+            background: rgba(0, 0, 30, 0.6);
+            border: 2px solid #00ff00;
+            margin-bottom: 30px;
+        }
+        
+        .article-content p {
+            margin-bottom: 25px;
+            text-align: justify;
+        }
+        
+        .article-rating {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+            padding: 15px;
+            background: rgba(0, 0, 40, 0.7);
+            border: 2px solid #ff00ff;
+        }
+        
+        .rating-label {
+            color: #00ffff;
+            margin-right: 20px;
+            font-size: 1.2rem;
+        }
+        
+        .rating-stars {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .star {
+            color: #ffff00;
+            font-size: 2rem;
+        }
+        
+        .article-highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .highlight-box {
+            background: rgba(0, 30, 60, 0.7);
+            border: 2px solid #00ffff;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        
+        .highlight-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.4);
+        }
+        
+        .highlight-title {
+            color: #ffff00;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            border-bottom: 1px dashed #ff00ff;
+            padding-bottom: 5px;
+        }
+        
+        .gameplay-section {
+            background: rgba(60, 30, 0, 0.6);
+            border: 2px dashed #ff5500;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        
+        .section-title {
+            color: #00ff00;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .quote {
+            border-left: 4px solid #ffff00;
+            padding: 15px 20px;
+            margin: 20px 0;
+            background: rgba(0, 0, 0, 0.3);
+            font-style: italic;
+            position: relative;
+        }
+        
+        .quote::before {
+            content: """";
+            position: absolute;
+            top: -20px;
+            left: 5px;
+            font-size: 4rem;
+            color: rgba(255, 255, 0, 0.2);
+        }
+        
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .impact-card {
+            background: rgba(0, 0, 40, 0.7);
+            border: 2px solid #ffff00;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .impact-name {
+            color: #00ffff;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ff00ff;
+            padding-bottom: 5px;
+        }
+        
+        .heart-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .heart {
+            width: 100px;
+            height: 100px;
+            background: #ff0000;
+            position: relative;
+            transform: rotate(-45deg);
+            animation: heartbeat 1.2s infinite;
+        }
+        
+        .heart::before,
+        .heart::after {
+            content: "";
+            width: 100px;
+            height: 100px;
+            background: #ff0000;
+            border-radius: 50%;
+            position: absolute;
+        }
+        
+        .heart::before {
+            top: -50px;
+            left: 0;
+        }
+        
+        .heart::after {
+            top: 0;
+            left: 50px;
+        }
+        
+        @keyframes heartbeat {
+            0% { transform: rotate(-45deg) scale(1); }
+            25% { transform: rotate(-45deg) scale(1.1); }
+            50% { transform: rotate(-45deg) scale(1); }
+            75% { transform: rotate(-45deg) scale(1.1); }
+            100% { transform: rotate(-45deg) scale(1); }
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 30px;
+            border-top: 3px dotted #ff00ff;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .social-icon {
+            width: 50px;
+            height: 50px;
+            background: #000;
+            border: 2px solid #00ffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffff00;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 1.2rem;
+        }
+        
+        .social-icon:hover {
+            background: #00ffff;
+            color: #000;
+            transform: rotate(5deg) scale(1.1);
+        }
+        
+        .flashing {
+            animation: flash 0.5s infinite alternate;
+        }
+        
+        @keyframes flash {
+            from { opacity: 1; }
+            to { opacity: 0.6; }
+        }
+        
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 1.8rem;
+            }
+            
+            .tagline {
+                font-size: 0.8rem;
+            }
+            
+            .article-title {
+                font-size: 1.5rem;
+            }
+            
+            .article-subtitle {
+                font-size: 1rem;
+            }
+            
+            .nav-btn {
+                padding: 8px 12px;
+                font-size: 0.7rem;
+            }
+            
+            .article-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .heart {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .heart::before,
+            .heart::after {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .heart::before {
+                top: -35px;
+            }
+            
+            .heart::after {
+                left: 35px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="scanline"></div>
+    <div class="crt-overlay"></div>
+    
+    <div class="container">
+        <div class="pixel-border"></div>
+        
+        <header>
+            <div class="character"></div>
+            <h1 class="logo glow">PIXEL<span style="color:#ff00ff;">PEN</span></h1>
+            <p class="tagline">WHERE WORDS MEET 8-BIT WONDER</p>
+        </header>
+        
+        <nav>
+            <a href="index.html" class="nav-btn flashing">HOME</a>
+            <a href="index.html#portfolio" class="nav-btn">GAME REVIEWS</a>
+            <a href="index.html#contact" class="nav-btn">CONTACT</a>
+        </nav>
+        
+        <div class="article-header">
+            <a href="index.html" class="back-btn">← BACK TO PORTFOLIO</a>
+            <h2 class="article-title">UNDERTALE'S TIMELESS UNDERGROUND LEGACY</h2>
+        </div>
+        
+        <p class="article-subtitle">How a Small RPG Redefined Player Agency and Narrative in Indie Gaming</p>
+        
+        <div class="article-content">
+            <p>A DECADE AFTER ITS RELEASE, UNDERTALE STILL RESONATES WITH A POWER THAT DEFIES ITS SIMPLE GRAPHICS AND SHORT PLAY TIME. TOBY FOX'S MASTERPIECE ISN'T JUST A GAME—IT'S A CULTURAL PHENOMENON THAT FOREVER CHANGED HOW WE THINK ABOUT PLAYER AGENCY, MORALITY SYSTEMS, AND THE VERY NATURE OF RPG COMBAT.</p>
+            
+            <div class="heart-container">
+                <div class="heart"></div>
+            </div>
+            <p style="text-align: center; color: #ff5500; margin-top: -10px;">THE HEART OF UNDERTALE STILL BEATS STRONG</p>
+            
+            <div class="gameplay-section">
+                <h3 class="section-title">REVOLUTIONARY MECHANICS</h3>
+                <p>UNDERTALE'S GENIUS LIES IN ITS SUBVERSION OF ESTABLISHED RPG CONVENTIONS. THE "MERCY" SYSTEM WASN'T JUST A NOVELTY—IT WAS A FUNDAMENTAL REIMAGINING OF HOW PLAYERS INTERACT WITH GAME WORLDS. BY GIVING EQUAL WEIGHT TO VIOLENT AND PACIFIST SOLUTIONS, FOX CREATED A GAME WHERE PLAYSTYLE TRULY MATTERED, WITH THE NARRATIVE ADAPTING IN MEANINGFUL WAYS.</p>
+                
+                <p>THE BULLET HELL COMBAT WAS EQUALLY INNOVATIVE. BY BLENDING TRADITIONAL TURN-BASED MECHANICS WITH ACTION GAME ELEMENTS, UNDERTALE CREATED A HYBRID SYSTEM THAT FELT FRESH AND ENGAGING. EACH ENEMY HAD UNIQUE PATTERNS THAT REFLECTED THEIR PERSONALITIES, TURNING BATTLES INTO CHARACTER-DRIVEN ENCOUNTERS RATHER THAN MINDLESS GRINDS.</p>
+            </div>
+            
+            <div class="article-rating">
+                <span class="rating-label">TIMELESS RATING:</span>
+                <div class="rating-stars">
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                </div>
+            </div>
+            
+            <div class="quote">
+                "UNDERTALE IS MORE THAN A GAME—IT'S A MEDITATION ON EMPATHY, CHOICE, AND CONSEQUENCE. ITS GREATEST ACHIEVEMENT IS HOW IT MAKES PLAYERS FEEL GENUINE REMORSE FOR THEIR ACTIONS IN A WAY NO OTHER GAME HAS MANAGED."
+            </div>
+            
+            <h3 style="color:#00ff00; margin: 25px 0 15px; border-bottom: 1px dashed #ff00ff; padding-bottom: 5px;">ENDURING INFLUENCE</h3>
+            
+            <div class="article-highlights">
+                <div class="highlight-box">
+                    <h4 class="highlight-title">MORAL COMPLEXITY</h4>
+                    <p>Pioneered nuanced morality systems where choices had genuine narrative weight rather than binary good/evil outcomes.</p>
+                </div>
+                
+                <div class="highlight-box">
+                    <h4 class="highlight-title">FOURTH WALL INNOVATION</h4>
+                    <p>Masterful breaking of the fourth wall that enhanced rather than distracted from the narrative.</p>
+                </div>
+                
+                <div class="highlight-box">
+                    <h4 class="highlight-title">CHARACTER DEPTH</h4>
+                    <p>Proved that simple pixel art could convey deep emotional complexity through writing and design.</p>
+                </div>
+            </div>
+            
+            <p>WHAT MAKES UNDERTALE TRULY TIMELESS IS ITS EMOTIONAL INTELLIGENCE. CHARACTERS LIKE SANS, PAPYRUS, AND UNDYNE AREN'T JUST MEMES—THEY'RE FULLY REALIZED PERSONALITIES WITH MOTIVATIONS, FLAWS, AND DEPTH THAT RIVAL CHARACTERS IN LITERARY FICTION. THE GAME'S ABILITY TO SWING FROM SLAPSTICK HUMOR TO HEART-WRENCHING PATHOS REMAINS UNMATCHED IN THE INDIE SPACE.</p>
+            
+            <div class="gameplay-section">
+                <h3 class="section-title">CULTURAL IMPACT</h3>
+                <p>UNDERTALE'S INFLUENCE EXTENDS FAR BEYIND GAME MECHANICS. IT INSPIRED A GENERATION OF DEVELOPERS TO PRIORITIZE NARRATIVE INNOVATION OVER GRAPHICAL FIDELITY. ITS MEMES BECAME CULTURAL TOUCHSTONES, ITS SOUNDTRACK A CONCERT HALL STAPLE, AND ITS THEMES SUBJECTS OF ACADEMIC STUDY.</p>
+                
+                <div class="impact-grid">
+                    <div class="impact-card">
+                        <div class="impact-name">INDIE REVOLUTION</div>
+                        <p>Proved that small teams could create culturally significant works rivaling AAA productions.</p>
+                    </div>
+                    <div class="impact-card">
+                        <div class="impact-name">MUSIC LEGACY</div>
+                        <p>Megalo Strike Back and Hopes and Dreams became anthems for a generation of gamers.</p>
+                    </div>
+                    <div class="impact-card">
+                        <div class="impact-name">SPEEDRUN CULTURE</div>
+                        <p>Its multiple endings created diverse speedrun categories that remain popular today.</p>
+                    </div>
+                    <div class="impact-card">
+                        <div class="impact-name">ACADEMIC STUDY</div>
+                        <p>Became a frequent subject in game studies programs for its narrative innovation.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <p>THE GAME'S GREATEST LEGACY MIGHT BE HOW IT CHANGED PLAYER EXPECTATIONS. BEFORE UNDERTALE, FEW GAMES ATTEMPTED TO REMEMBER PLAYER CHOICES ACROSS MULTIPLE PLAYTHROUGHS. ITS PERSISTENT MEMORY SYSTEM—WHERE THE GAME "REMEMBERS" YOUR PREVIOUS ACTIONS EVEN AFTER RESETS—CREATED A NEW STANDARD FOR NARRATIVE CONSEQUENCE IN GAMING.</p>
+            
+            <p>IN AN INDUSTRY OBSESSED WITH GRAPHICAL ADVANCEMENTS AND OPEN-WORLD SCOPE, UNDERTALE REMAINS A POWERFUL REMINDER THAT GAMES ARE AT THEIR BEST WHEN THEY PRIORITIZE MEANINGFUL INTERACTION OVER TECHNICAL SPECS. ITS LEGACY IS NOT JUST IN THE GAMES IT INSPIRED, BUT IN THE PLAYERS IT CHANGED—FORCING US TO CONFRONT THE ETHICAL IMPLICATIONS OF OUR ACTIONS IN VIRTUAL SPACES, AND REMINDING US THAT EVERY CHARACTER, NO MATTER HOW PIXELATED, DESERVES COMPASSION.</p>
+            
+            <p style="text-align: center; font-size: 1.2rem; color: #ffff00; margin-top: 30px;">
+                IN THE END, UNDERTALE'S GREATEST ACHIEVEMENT WASN'T REDEFINING A GENRE—<br>
+                IT WAS REDEFINING HOW WE SEE OURSELVES AS PLAYERS.
+            </p>
+        </div>
+        
+        
+        <footer>
+            <p>PIXELPEN PORTFOLIO SYSTEM - Nichole Higgins © 2025</p>
+            <p>INSERT COIN TO CONTINUE</p>
+        </footer>
+    </div>
+
+    <script>
+        // Initialize the page with some effects
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add scanline effect variation
+            setInterval(() => {
+                const scanline = document.querySelector('.scanline');
+                scanline.style.animationDuration = (Math.random() * 6 + 4) + 's';
+            }, 8000);
+            
+            // Add glow effect to stars
+            const stars = document.querySelectorAll('.star');
+            stars.forEach((star, index) => {
+                setTimeout(() => {
+                    star.classList.add('glow');
+                }, index * 300);
+            });
+            
+            // Add pulsing effect to character
+            const character = document.querySelector('.character');
+            setInterval(() => {
+                character.style.boxShadow = '0 0 20px #ff5500';
+                setTimeout(() => {
+                    character.style.boxShadow = '0 0 20px #ffff00';
+                }, 1000);
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

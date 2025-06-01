@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FREERIDE Review | PixelPen</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            padding: 20px;
+        }
+        
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(0, 0, 0, 0.15),
+                    rgba(0, 0, 0, 0.15) 1px,
+                    transparent 1px,
+                    transparent 2px
+                );
+            pointer-events: none;
+            z-index: 100;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            border: 4px solid #ff00ff;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+        }
+        
+        .pixel-border {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            border: 4px solid #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                rgba(0, 0, 0, 0) 50%,
+                rgba(0, 0, 0, 0.2) 50%
+            );
+            background-size: 100% 4px;
+            z-index: 99;
+            pointer-events: none;
+            animation: scanline 8s linear infinite;
+        }
+        
+        @keyframes scanline {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 0 100%;
+            }
+        }
+        
+        .crt-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 4px 100%;
+            pointer-events: none;
+            z-index: 999;
+        }
+        
+        .glow {
+            animation: glow 2s infinite alternate;
+        }
+        
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #e60073, 0 0 20px #e60073;
+            }
+            to {
+                text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6;
+            }
+        }
+        
+        .pixel-art {
+            image-rendering: pixelated;
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            border-bottom: 3px dotted #ff00ff;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            color: #00ffff;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 0 #ff00ff;
+            letter-spacing: 2px;
+        }
+        
+        .tagline {
+            color: #ffff00;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+        
+        .character {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            background: linear-gradient(45deg, #00ff00, #00ffff);
+            border: 3px solid #ffff00;
+            position: relative;
+            overflow: hidden;
+            border-radius: 50%;
+        }
+        
+        .character::before {
+            content: "FR";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #000;
+            font-weight: bold;
+            font-size: 1.8rem;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .nav-btn {
+            background: #000;
+            color: #ffff00;
+            border: 3px solid #00ffff;
+            padding: 12px 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+        }
+        
+        .nav-btn:hover {
+            background: #00ffff;
+            color: #000;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+            transform: translateY(-3px);
+        }
+        
+        .nav-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .article-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px dashed #ff00ff;
+        }
+        
+        .back-btn {
+            background: #000;
+            color: #ffff00;
+            border: 3px solid #00ffff;
+            padding: 10px 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: #00ffff;
+            color: #000;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
+        }
+        
+        .article-title {
+            color: #ffff00;
+            font-size: 2.2rem;
+            text-align: center;
+            flex-grow: 1;
+            text-shadow: 2px 2px 0 #ff00ff;
+        }
+        
+        .article-subtitle {
+            color: #00ffff;
+            font-size: 1.2rem;
+            text-align: center;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+        
+        .article-content {
+            font-size: 1rem;
+            line-height: 1.8;
+            padding: 25px;
+            background: rgba(0, 0, 30, 0.6);
+            border: 2px solid #00ff00;
+            margin-bottom: 30px;
+        }
+        
+        .article-content p {
+            margin-bottom: 25px;
+            text-align: justify;
+        }
+        
+        .article-rating {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+            padding: 15px;
+            background: rgba(0, 0, 40, 0.7);
+            border: 2px solid #ff00ff;
+        }
+        
+        .rating-label {
+            color: #00ffff;
+            margin-right: 20px;
+            font-size: 1.2rem;
+        }
+        
+        .rating-stars {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .star {
+            color: #ffff00;
+            font-size: 2rem;
+        }
+        
+        .article-highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .highlight-box {
+            background: rgba(0, 30, 60, 0.7);
+            border: 2px solid #00ffff;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        
+        .highlight-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.4);
+        }
+        
+        .highlight-title {
+            color: #ffff00;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            border-bottom: 1px dashed #ff00ff;
+            padding-bottom: 5px;
+        }
+        
+        .gameplay-section {
+            background: rgba(0, 30, 0, 0.6);
+            border: 2px dashed #00ff00;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        
+        .section-title {
+            color: #00ff00;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .quote {
+            border-left: 4px solid #ffff00;
+            padding: 15px 20px;
+            margin: 20px 0;
+            background: rgba(0, 0, 0, 0.3);
+            font-style: italic;
+            position: relative;
+        }
+        
+        .quote::before {
+            content: """";
+            position: absolute;
+            top: -20px;
+            left: 5px;
+            font-size: 4rem;
+            color: rgba(255, 255, 0, 0.2);
+        }
+        
+        .flow-meter {
+            height: 20px;
+            background: #333;
+            border: 2px solid #00ffff;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .flow-level {
+            height: 100%;
+            width: 95%;
+            background: linear-gradient(90deg, #00ff00, #00ffff);
+            animation: flow-glow 2s infinite alternate;
+        }
+        
+        @keyframes flow-glow {
+            from { box-shadow: 0 0 5px #00ff00; }
+            to { box-shadow: 0 0 20px #00ffff; }
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 30px;
+            border-top: 3px dotted #ff00ff;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .social-icon {
+            width: 50px;
+            height: 50px;
+            background: #000;
+            border: 2px solid #00ffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffff00;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 1.2rem;
+        }
+        
+        .social-icon:hover {
+            background: #00ffff;
+            color: #000;
+            transform: rotate(5deg) scale(1.1);
+        }
+        
+        .flashing {
+            animation: flash 0.5s infinite alternate;
+        }
+        
+        @keyframes flash {
+            from { opacity: 1; }
+            to { opacity: 0.6; }
+        }
+        
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 1.8rem;
+            }
+            
+            .tagline {
+                font-size: 0.8rem;
+            }
+            
+            .article-title {
+                font-size: 1.5rem;
+            }
+            
+            .article-subtitle {
+                font-size: 1rem;
+            }
+            
+            .nav-btn {
+                padding: 8px 12px;
+                font-size: 0.7rem;
+            }
+            
+            .article-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="scanline"></div>
+    <div class="crt-overlay"></div>
+    
+    <div class="container">
+        <div class="pixel-border"></div>
+        
+        <header>
+            <div class="character"></div>
+            <h1 class="logo glow">PIXEL<span style="color:#ff00ff;">PEN</span></h1>
+            <p class="tagline">WHERE WORDS MEET 8-BIT WONDER</p>
+        </header>
+        
+        <nav>
+            <a href="index.html" class="nav-btn flashing">HOME</a>
+            <a href="index.html#portfolio" class="nav-btn">GAME REVIEWS</a>
+            <a href="index.html#contact" class="nav-btn">CONTACT</a>
+        </nav>
+        
+        <div class="article-header">
+            <a href="index.html" class="back-btn">← BACK TO PORTFOLIO</a>
+            <h2 class="article-title">FREEDOM ON DIGITAL RAILS</h2>
+        </div>
+        
+        <p class="article-subtitle">How FREERIDE Redefines Player Agency Through Personality-Driven Mechanics</p>
+        
+        <div class="article-content">
+            <p>FREERIDE ISN'T JUST ANOTHER SKATING GAME—IT'S A PHILOSOPHICAL STATEMENT ON PLAYER AGENCY WRAPPED IN A SILKY-SMOOTH MOVEMENT SYSTEM. DEVELOPED BY MOMENTUM STUDIOS, THIS INDIE GEM TAKES THE CONCEPT OF FREEDOM AND WEAVES IT INTO EVERY ASPECT OF ITS DESIGN, CREATING A GAMING EXPERIENCE THAT FEELS GENUINELY LIBERATING.</p>
+            
+            <div class="gameplay-section">
+                <h3 class="section-title">THE FLOW STATE ACHIEVED</h3>
+                <p>THE MOVEMENT MECHANICS IN FREERIDE ARE A MASTERCLASS IN INTUITIVE DESIGN. WITH JUST TWO BUTTONS AND AN ANALOG STICK, PLAYERS CAN EXECUTE COMPLEX MANEUVERS THAT FEEL EXTRAORDINARILY NATURAL. THE GAME'S PHYSICS ENGINE REWARDS CREATIVITY RATHER THAN PUNISHING MISTAKES, ALLOWING FOR SERENDIPITOUS MOMENTS OF BRILLIANCE THAT EMERGE FROM PLAYER EXPERIMENTATION.</p>
+                
+                <p>THE GENIUS LIES IN HOW THE GAME ADAPTS TO YOUR PLAYSTYLE. AFTER THE FIRST HOUR, FREERIDE'S "PERSONALITY ENGINE" BEGINS ADJUSTING THE WORLD TO YOUR MOVEMENT PREFERENCES. PREFER TECHNICAL GRINDS AND FLIPS? THE ENVIRONMENT WILL GENERATE MORE URBAN TERRAIN. FAVOR LONG, FLOWING LINES? EXPECT MORE OPEN HILLSIDES AND WINDING ROADS.</p>
+            </div>
+            
+            <div class="article-rating">
+                <span class="rating-label">FINAL RATING:</span>
+                <div class="rating-stars">
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                    <span class="star">☆</span>
+                </div>
+            </div>
+            
+            <div class="flow-meter">
+                <div class="flow-level"></div>
+            </div>
+            <p style="text-align: center; color: #00ffff; margin-top: -15px;">FLOW STATE ACHIEVEMENT: 95%</p>
+            
+            <div class="quote">
+                "FREERIDE IS THE FIRST GAME THAT GENUINELY UNDERSTANDS WHAT SKATERS MEAN WHEN THEY TALK ABOUT 'FLOW STATE.' IT CAPTURES THAT TRANSCENDENT FEELING WHERE THE BOARD BECOMES AN EXTENSION OF YOUR BODY, AND THE WORLD BECOMES A PLAYGROUND OF POSSIBILITIES."
+            </div>
+            
+            <h3 style="color:#00ff00; margin: 25px 0 15px; border-bottom: 1px dashed #ff00ff; padding-bottom: 5px;">REVOLUTIONARY FEATURES</h3>
+            
+            <div class="article-highlights">
+                <div class="highlight-box">
+                    <h4 class="highlight-title">ADAPTIVE ENVIRONMENT</h4>
+                    <p>The game world dynamically reshapes itself based on your skating style, creating personalized playgrounds that evolve with your skills.</p>
+                </div>
+                
+                <div class="highlight-box">
+                    <h4 class="highlight-title">ZERO UI DESIGN</h4>
+                    <p>No health bars, no score counters—just you and the environment. The game communicates through haptic feedback and environmental cues.</p>
+                </div>
+                
+                <div class="highlight-box">
+                    <h4 class="highlight-title">EMOTIONAL SOUNDSCAPE</h4>
+                    <p>An AI-generated soundtrack that adapts to your movement rhythm, creating a unique audio experience for every session.</p>
+                </div>
+            </div>
+            
+            <p>WHAT SETS FREERIDE APART IS ITS REJECTION OF TRADITIONAL GAME STRUCTURE. THERE ARE NO MISSIONS, NO OBJECTIVES, AND NO SCORING SYSTEM. INSTEAD, THE GAME MEASURES SUCCESS THROUGH "FLOW POINTS"—AN ABSTRACT METRIC THAT QUANTIFIES HOW SEAMLESSLY YOU MOVE THROUGH THE ENVIRONMENT. THIS SYSTEM REWARDS PLAYERS FOR FINDING THEIR OWN RHYTHM RATHER THAN CHASING ARBITRARY GOALS.</p>
+            
+            <div class="gameplay-section">
+                <h3 class="section-title">THE PERSONALITY PARADOX</h3>
+                <p>FREERIDE'S MOST INNOVATIVE FEATURE IS ITS "DIGITAL PERSONALITY" SYSTEM. AS YOU PLAY, THE GAME DEVELOPS A DISTINCT PERSONALITY BASED ON YOUR PLAYSTYLE. AGGRESSIVE SKATERS WILL FIND THEIR GAME BECOMING MORE PUNK-ROCK AND REBELLIOUS, WHILE ELEGANT SKATERS WILL EXPERIENCE A MORE SERENE, ALMOST BALLET-LIKE AESTHETIC. THIS MANIFESTS THROUGH VISUAL FILTERS, SOUND DESIGN, AND EVEN THE WAY THE CAMERA MOVES.</p>
+            </div>
+            
+            <p>THE AUDIO DESIGN IS EQUALLY REVOLUTIONARY. RATHER THAN A STATIC SOUNDTRACK, FREERIDE GENERATES MUSIC IN REAL-TIME BASED ON YOUR MOVEMENT. THE RHYTHM OF YOUR WHEELS ON PAVEMENT BECOMES THE PERCUSSION, THE WHIR OF YOUR SPINS ADDS SYNTHETIC MELODIES, AND THE IMPACT OF YOUR LANDINGS PROVIDES BASS NOTES. THE RESULT IS A UNIQUE SOUNDSCAPE FOR EVERY PLAYER.</p>
+            
+            <p>WHILE FREERIDE'S LACK OF TRADITIONAL STRUCTURE MAY TURN OFF SOME PLAYERS, IT STANDS AS A BOLD EXPERIMENT IN WHAT VIDEO GAMES CAN BE. IT'S LESS A GAME AND MORE A DIGITAL TOY—A SPACE FOR PURE, UNFETTERED EXPRESSION. IN AN ERA OF GUIDED EXPERIENCES AND HAND-HOLDING TUTORIALS, FREERIDE DARES PLAYERS TO FIND THEIR OWN FUN, AND IN DOING SO, REDISCOVER THE JOY OF PLAY ITSELF.</p>
+        </div>
+        
+        
+        <footer>
+            <p>PIXELPEN PORTFOLIO SYSTEM - Nichole Higgins © 2025</p>
+            <p>INSERT COIN TO CONTINUE</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Initialize the page with some effects
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add scanline effect variation
+            setInterval(() => {
+                const scanline = document.querySelector('.scanline');
+                scanline.style.animationDuration = (Math.random() * 6 + 4) + 's';
+            }, 8000);
+            
+            // Add glow effect to stars
+            const stars = document.querySelectorAll('.star');
+            stars.forEach((star, index) => {
+                setTimeout(() => {
+                    star.classList.add('glow');
+                }, index * 300);
+            });
+            
+            // Add pulsing effect to character
+            const character = document.querySelector('.character');
+            setInterval(() => {
+                character.style.boxShadow = '0 0 20px #00ff00';
+                setTimeout(() => {
+                    character.style.boxShadow = '0 0 10px #00ffff';
+                }, 1000);
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
